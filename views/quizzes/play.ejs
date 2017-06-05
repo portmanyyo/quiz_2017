@@ -1,18 +1,49 @@
 
+
 <h1>
     Jugar:
 </h1>
 
+
 <form method="get" action="/quizzes/<%= quiz.id %>/check">
-    <p>
-        Pregunta: <b><%= quiz.question %></b>
-    </p>
 
+    <div class="quizItem">
 
-    <div class="wideRow">
-        <input type="text" class="itemWide" name="answer" value="<%= answer %>" placeholder="Respuesta" autocomplete="off"/>
-        <input type="submit" class="itemNarrow" value="Comprobar">
+        <div>
+            <% var attachment = quiz.Attachment; %>
+            <% include ../attachments/_show %>
+        </div>
+
+        <div>
+            <% include ../favourites/_stars.ejs %>
+            <br/>
+            <b><%= quiz.question %></b>
+
+            <div class="wideRow">
+                <input type="text" class="itemWide" name="answer" value="<%= answer %>" placeholder="Respuesta" autocomplete="off"/>
+                <input type="submit" class="itemNarrow" value="Comprobar">
+            </div>
+
+            <small> by <%= quiz.Author ? quiz.Author.username : "Anómino" %> </small>
+        </div>
     </div>
+
 </form>
+
+
+<h1>
+    Pistas:
+</h1>
+
+<% if (session.user) { %>
+    <% include ../tips/new %>
+<% } %>
+
+<% var tips = quiz.Tips; %>
+<% var quizId = quiz.id; %>
+<% var quizAuthorId = quiz.AuthorId; %>
+
+<% include ../tips/index %>
+
 
 <a href="/quizzes"><button>Volver</button></a>

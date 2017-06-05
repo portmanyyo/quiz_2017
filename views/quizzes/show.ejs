@@ -3,9 +3,45 @@
     Ver pregunta:
 </h1>
 
-<ul>
-    <li>Pregunta: <b><%= quiz.question %></b></li>
-    <li>Respuesta: <b><%= quiz.answer %></b></li>
-</ul>
+
+<div class="quizItem">
+
+    <div>
+        <% var attachment = quiz.Attachment; %>
+        <% include ../attachments/_show %>
+    </div>
+
+    <div>
+        <% include ../favourites/_stars.ejs %>
+        <br/>
+        Pregunta: <b><%= quiz.question %></b>
+        <br />
+        Respuesta: <b><%= quiz.answer %></b>
+        <br />
+        <small> by <%= quiz.Author ? quiz.Author.username : "Anómino" %> </small>
+    </div>
+
+</div>
+
+
+<a href="/goback"><button>volver</button></a>
+
+
+
+
+<h1>
+    Pistas:
+</h1>
+
+<% if (session.user) { %>
+    <% include ../tips/new %>
+<% } %>
+
+<% var tips = quiz.Tips; %>
+<% var quizId = quiz.id; %>
+<% var quizAuthorId = quiz.AuthorId; %>
+
+<% include ../tips/index %>
+
 
 <a href="/quizzes"><button>Volver</button></a>

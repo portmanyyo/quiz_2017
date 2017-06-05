@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> c34933d6141ff5430697c1fd921b2195c38927a5
 var models = require('../models');
 var Sequelize = require('sequelize');
 var url = require('url');
@@ -30,6 +34,87 @@ exports.deleteExpiredUserSession = function(req, res, next) {
 };
 
 
+<<<<<<< HEAD
+=======
+// Middleware: Se requiere hacer login.
+//
+// Si el usuario ya hizo login anteriormente entonces existira
+// el objeto user en req.session, por lo que continuo con los demas
+// middlewares o rutas.
+// Si no existe req.session.user, entonces es que aun no he hecho
+// login, por lo que me redireccionan a una pantalla de login.
+// Guardo en redir cual es mi url para volver automaticamente a
+// esa url despues de hacer login; pero si redir ya existe entonces
+// conservo su valor.
+//
+exports.loginRequired = function (req, res, next) {
+    if (req.session.user) {
+        next();
+    } else {
+        res.redirect('/session?redir=' + (req.param('redir') || req.url));
+    }
+};
+
+
+// MW que permite pasar solamente si el usuario logeado es admin.
+exports.adminRequired = function(req, res, next){
+
+    var isAdmin      = req.session.user.isAdmin;
+
+    if (isAdmin) {
+        next();
+    } else {
+        console.log('Ruta prohibida: el usuario logeado no es administrador.');
+        res.send(403);    }
+};
+
+// MW que permite pasar solo si el usuario logeado es:
+//   - el usuario a gestionar.
+exports.myselfRequired = function(req, res, next){
+
+    var isMyself = req.user.id === req.session.user.id;
+
+    if (isMyself) {
+        next();
+    } else {
+        console.log('Ruta prohibida: no es el usuario logeado.');
+        res.send(403);    }
+};
+
+
+// MW que permite pasar solo si el usuario logeado es:
+//   - admin
+//   - o es el usuario a gestionar.
+exports.adminOrMyselfRequired = function(req, res, next){
+
+    var isAdmin  = req.session.user.isAdmin;
+    var isMyself = req.user.id === req.session.user.id;
+
+    if (isAdmin || isMyself) {
+        next();
+    } else {
+        console.log('Ruta prohibida: no es el usuario logeado, ni un administrador.');
+        res.send(403);    }
+};
+
+
+// MW que permite pasar solo si el usuario logeado es:
+//   - admin
+//   - y no es el usuario a gestionar.
+exports.adminAndNotMyselfRequired = function(req, res, next){
+
+    var isAdmin   = req.session.user.isAdmin;
+    var isAnother = req.user.id !== req.session.user.id;
+
+    if (isAdmin && isAnother) {
+        next();
+    } else {
+        console.log('Ruta prohibida: es el usuario logeado o no es administrador.');
+        res.send(403);    }
+};
+
+
+>>>>>>> c34933d6141ff5430697c1fd921b2195c38927a5
 /*
  * Autenticar un usuario: Comprueba si el usuario esta registrado en users
  *
@@ -83,6 +168,10 @@ exports.create = function(req, res, next) {
             req.session.user = {
                 id:user.id,
                 username:user.username,
+<<<<<<< HEAD
+=======
+                isAdmin:user.isAdmin,
+>>>>>>> c34933d6141ff5430697c1fd921b2195c38927a5
                 expires: Date.now() + maxIdleTime
             };
 

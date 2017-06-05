@@ -26,13 +26,21 @@ module.exports = function (sequelize, DataTypes) {
                 type: DataTypes.BOOLEAN,
                 defaultValue: false
             }
+<<<<<<< HEAD
     },
+=======
+        },
+>>>>>>> c34933d6141ff5430697c1fd921b2195c38927a5
         {
             instanceMethods: {
                 verifyPassword: function (password) {
                     return encryptPassword(password, this.salt) === this.password;
                 }
+<<<<<<< HEAD
 }
+=======
+            }
+>>>>>>> c34933d6141ff5430697c1fd921b2195c38927a5
         });
 };
 
